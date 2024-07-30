@@ -1,35 +1,46 @@
 import tkinter as tk
 from tkinter import messagebox
+import random
 
 class HangmanGame:
     def __init__(self, root):
         self.root = root
-        self.root.title("Hangman Game")
+        self.root.title("Enhanced Hangman Game")
         self.root.geometry("600x400")
         self.root.resizable(False, False)
 
+        # Canvas for drawing hangman
         self.canvas = tk.Canvas(root, width=200, height=200, bg="white")
         self.canvas.place(x=50, y=50)
 
+        # Label to show guessed word
         self.word_label = tk.Label(root, text="", font=("Arial", 24))
         self.word_label.place(x=300, y=100)
 
+        # Entry and button for guessing letters
         self.entry = tk.Entry(root, font=("Arial", 18))
         self.entry.place(x=300, y=200)
-
         self.guess_button = tk.Button(root, text="Guess", command=self.guess_letter, font=("Arial", 18))
         self.guess_button.place(x=450, y=200)
 
+        # Label for remaining attempts
+        self.attempts_label = tk.Label(root, text="Attempts left: 6", font=("Arial", 16))
+        self.attempts_label.place(x=300, y=250)
+
+        # Initialize game state
         self.words = ["PYTHON", "JAVA", "KOTLIN", "JAVASCRIPT"]
+        self.reset_game()
+
+    def reset_game(self):
         self.secret_word = random.choice(self.words)
         self.guessed_word = ["_"] * len(self.secret_word)
         self.attempts = 6
         self.guessed_letters = []
-
         self.update_display()
 
     def update_display(self):
         self.word_label.config(text=" ".join(self.guessed_word))
+        self.attempts_label.config(text=f"Attempts left: {self.attempts}")
         self.canvas.delete("all")
         self.draw_hangman()
 
@@ -79,13 +90,6 @@ class HangmanGame:
         elif "_" not in self.guessed_word:
             messagebox.showinfo("Congratulations", "You guessed the word!")
             self.reset_game()
-
-    def reset_game(self):
-        self.secret_word = random.choice(self.words)
-        self.guessed_word = ["_"] * len(self.secret_word)
-        self.attempts = 6
-        self.guessed_letters = []
-        self.update_display()
 
 def main():
     root = tk.Tk()
